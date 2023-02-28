@@ -1,0 +1,1 @@
+[{"model": "index.role", "pk": 1, "fields": {"Role_ID": 1, "Role_Name": "System_Admin"}}, {"model": "index.role", "pk": 2, "fields": {"Role_ID": 2, "Role_Name": "HR"}}, {"model": "index.role", "pk": 3, "fields": {"Role_ID": 3, "Role_Name": "Employee"}}]

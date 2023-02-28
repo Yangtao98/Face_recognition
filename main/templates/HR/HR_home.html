@@ -1,0 +1,253 @@
+{% extends "index/base.html" %}
+{% load static %}
+{% block content %}
+{% include 'HR/HR_base.html'%}
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Dashboard</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{% url 'HR_home' %}">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section dashboard">
+      <div class="row">
+
+        <!-- Left side columns -->
+        <div class="col-lg-8">
+          <div class="row">
+
+            <!-- Sales Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card sales-card">
+
+
+                <div class="card-body">
+                  <h5 class="card-title">Clock IN <span>| Today</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-box-arrow-in-right"></i>
+                    </div>
+                    <div class="ps-3">
+                    {% if CheckIn in 'Present'  %}
+                     <h6 class="text-success">{{ CheckIn }}</h6>
+                        {% elif CheckIn in 'Pending' %}
+                         <h6 class="text-warning">{{ CheckIn }}</h6>
+                         {% else %}
+                         <h6 class="text-danger">{{ CheckIn }}</h6>
+                        {% endif %}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Sales Card -->
+
+            <!-- Revenue Card -->
+            <div class="col-xxl-4 col-md-6">
+              <div class="card info-card sales-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Clock Out <span>| Today</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-box-arrow-right"></i>
+                    </div>
+                    <div class="ps-3">
+                      {% if Ad.Mark in 'Present' %}
+                      <h6 class="text-success">{{ CheckOut }}</h6>
+                     {% elif CheckOut in 'Pending' %}
+                     <h6 class="text-warning">{{ CheckOut }}</h6>
+                     {% else %}
+                     <h6 class="text-danger">{{ CheckOut }}</h6>
+                    {% endif %}
+
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div><!-- End Revenue Card -->
+
+            <!-- Customers Card -->
+            <div class="col-xxl-4 col-xl-12">
+
+              <div class="card info-card customers-card">
+
+                <div class="card-body">
+                  <h5 class="card-title">Absent <span>| This Week</span></h5>
+
+                  <div class="d-flex align-items-center">
+                    <div class="card-icon rounded-circle d-flex align-items-center justify-content-center">
+                      <i class="bi bi-bell-slash"></i>
+                    </div>
+                    <div class="ps-3">
+                      <h6>{{count }} day <span class="text-danger">Absent</span></h6>
+
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+
+            </div><!-- End Customers Card -->
+
+
+            <!-- Recent Sales -->
+            <div class="col-12">
+              <div class="card recent-sales overflow-auto">
+
+                <div class="filter">
+                  <a class="icon" href="#" data-bs-toggle="dropdown"><i class="bi bi-three-dots"></i></a>
+                  <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
+                    <li class="dropdown-header text-start">
+                      <h6>Filter</h6>
+                    </li>
+
+                    <li><a class="dropdown-item" href="#">Today</a></li>
+                    <li><a class="dropdown-item" href="#">This Month</a></li>
+                    <li><a class="dropdown-item" href="#">This Year</a></li>
+                  </ul>
+                </div>
+
+                <div class="card-body">
+                  <h5 class="card-title">Recent clock In & Out <span>| Today</span></h5>
+
+                  <table class="table table-borderless datatable">
+                    <thead>
+                      <tr>
+                        <th scope="col">Date</th>
+                        <th scope="col">Work Time</th>
+                        <th scope="col">Clock in/Out Time</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                     
+                    <tbody>
+                      {% for Ad in Redata %}
+                      <tr>
+                        <th scope="row">{{ Ad.StartDate|date:'d m Y'}}</th>
+                        <td>{{ Ad.StartTime |date:"G:i"}}  --   {{ Ad.EndTime |date:"G:i"}}</td>
+                        {% if Ad.Mark in 'Present' %}
+                        
+                        <td><span class ="text-success">{{ Ad.InTime |date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i" }}</span></td>
+                        <td><span class="badge bg-success">{{ Ad.Mark }}</span></td>
+
+
+                        {% elif Ad.Mark in 'Late' %}
+
+                        <td><span class ="text-danger">{{ Ad.InTime |date:"G:i"}} </span>  --   {{ Ad.OutTime |date:"G:i"}}</td>
+
+                        <td><span class="badge bg-success">{{ Ad.Mark }}</span></td>
+
+                        {% elif Ad.Mark in 'Leave early' %}
+
+                        <td>{{ Ad.InTime|date:"G:i" }}   --   <span class ="text-danger">{{ Ad.OutTime |date:"G:i"}} </span></td>
+
+                        <td><span class="badge bg-danger">{{ Ad.Mark }}</span></td>
+                        {% elif Ad.Mark in 'Pending' %}
+
+                        <td><span class="text-warning">{{ Ad.InTime|date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i"}}</span></td>
+
+                        <td><span class="badge bg-warning">{{ Ad.Mark }}</span></td>
+                        {% elif Ad.Mark in 'Off' %}
+
+                        <td><span class="text-warning">{{ Ad.InTime|date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i"}}</span></td>
+
+                        <td><span class="badge bg-warning">{{ Ad.Mark }}</span></td>
+                        {% elif Ad.Mark in 'MC' %}
+
+                        <td><span class="text-warning">{{ Ad.InTime|date:"G:i" }}   --   {{ Ad.OutTime |date:"G:i"}}</span></td>
+
+                        <td><span class="badge bg-warning">{{ Ad.Mark }}</span></td>
+
+                        {% else %}
+
+                        <td><span class ="text-danger">{{ Ad.InTime |date:"G:i"}}   --   {{ Ad.OutTime |date:"G:i"}}</span></td>
+
+                        <td><span class="badge bg-danger">{{ Ad.Mark }}</span></td>
+
+                        {% endif %}
+                           
+                       
+                      </tr>
+                      {% endfor %}
+                    </tbody>
+                     
+                  </table>
+
+                </div>
+
+              </div>
+            </div><!-- End Recent Sales -->
+
+
+          </div>
+        </div><!-- End Left side columns -->
+
+        <!-- Right side columns -->
+        <div class="col-lg-4">
+
+          <!-- Recent Activity -->
+          <div class="card">
+            
+
+            <div class="card-body">
+              <h5 class="card-title">Schedule <span>| This week</span></h5>
+
+              <div class="activity" id="activity">
+                {% for Ad in ScheduleWeek %}
+               <span class="titledisplay span{{ forloop.counter }}"  style="display:none;">{{ Ad.StartDate}}</span>
+                <div class="activity-item d-flex">
+
+                  <div class="activite-label week{{ forloop.counter }}" ></div>
+                        <i class='bi bi-circle-fill activity-badge text-success align-self-start'></i>
+                        <div class="activity-content">
+                        {{ Ad.StartTime |date:"G:i"}} - {{ Ad.EndTime |date:"G:i"}} &#12288;
+                         <span class="text-success fw-bold" ></span>
+                            </div>
+
+
+                </div><!-- End activity item-->
+                 {% endfor %}
+              </div>
+
+            </div>
+          </div><!-- End Recent Activity -->
+
+          
+
+        </div><!-- End Right side columns -->
+
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+{% endblock content %}
+{% block script %}
+<script>
+const weekdays = ["Sun","Mon","Tues","Wed","Thur","Fri","Sat"];
+
+var d;
+var newdate
+var e;
+var day;
+{% for Ad in ScheduleWeek %}
+d = document.querySelector(".span{{ forloop.counter }}").innerHTML;
+
+newdate= new Date(d).getDay();
+day = weekdays[newdate];
+e = document.querySelector("div.week{{ forloop.counter }}").innerHTML = day;
+{% endfor %}
+
+
+</script>
+{% endblock script %}

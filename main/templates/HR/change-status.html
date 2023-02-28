@@ -1,0 +1,125 @@
+{% extends "index/base.html" %}
+{% load static %}
+{% block content %}
+{% include 'HR/HR_base.html'%}
+
+  <main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Change Status for {{ Name }}</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{%  url 'HR_home' %}">Home</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'EmployeesPage' %}">Employees</a></li>
+          <li class="breadcrumb-item"><a href="{% url 'EmployeesProfile' Emp_id %}">{{ Name }}</a></li>
+          <li class="breadcrumb-item active">Change Status</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section">
+      <div class="row">
+        <div class="col-lg-12">
+
+          <div class="card recent-sales overflow-auto">
+
+            <div class="card-body">
+                <h5 class="card-title">Change Status For {{ Name }}</h5>
+              <form  method="POST" class="row g-3 needs-validation" action = "">
+               {% csrf_token %}
+                <!------------------------Start Date---------------------------->
+                <div class="col-lg-5 row g-3">
+                  <h6 class="title2 ">Select Date:</h6>
+                  <div class="col-md-9">
+                    <label for="dateselected" class="form-label">Date</label>
+                    <div class="input-group has-validation">
+
+                      {% for i in Data %}
+                          <input  name="attenid" type="text" value="{{ i.StartDate }}" disabled class="form-control"/>
+                      {% endfor %}
+                    </div>
+                  </div>
+
+                </div><!-----End of Start Date------>
+
+
+                
+                <div class="col-lg-5 row g-3">
+                  <h6 class="title2 ">Status:</h6>
+                
+                  <div class="col-md-4">
+                    <label for="status" class="form-label">Status</label>
+                    <div class="input-group has-validation">
+                      <select class="form-select" id="status" name="status" aria-label="Floating label select example" required>
+                        <option value="" selected disabled>Choose</option>
+                        <option value="Pending">Work Time</option>
+                        <option value="MC">MC</option>
+                        <option value="Off">Off</option>
+                        
+                      </select>
+                    </div>
+                  </div>
+                  
+                  <div id="timechange" class="col-lg-8">
+                    <div class="col-lg-12 row g-2">
+                      <div class="col-lg-6">
+                        <div class="col-md-12">
+                          <label for="timestartnew" class="form-label">Start Time: </label>
+                          <div class="input-group has-validation">
+                            <select class="form-select" id="timestartnew" name="timestartnew" >
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6">
+                        <div class="col-md-12">
+                          <label for="timeendnew" class="form-label">End Time:</label>
+                          <div class="input-group has-validation">
+                            <select class="form-select" id="timeendnew" name="timeendnew" >
+                            </select>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  
+                  
+                </div><!-----End of End Time------>
+                
+                <div class="col-lg-6">
+                  <br>
+                  <br>
+                  <a href="{% url 'EmployeeSchedule' Emp_id %}" class="btn btn-danger" >Back</a>
+                 <button type="submit" class="btn btn-primary float-end">Update</button>
+                   <!-- <a href="{% url 'EmployeeSchedule' Emp_id %}"  type="submit" class="btn btn-primary float-end">Update</a> -->
+                </div>
+
+              </form>
+              
+
+            </div>
+
+          </div>
+            
+
+        </div>
+      </div>
+    </section>
+
+  </main><!-- End #main -->
+
+  
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+{% endblock content %}
+{% block script %}
+<script>
+
+
+
+</script>
+{% endblock script %}

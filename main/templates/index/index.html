@@ -1,0 +1,86 @@
+{% extends "index/base.html" %}
+{% load static %}
+{% block content %}
+
+<style>
+  .endpage {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+  }
+
+  .nav-link:hover {
+    color: #4154f1;
+
+  }
+
+  .nav-link {
+    color: #2c384e;
+    padding: 10px;
+  }
+</style>
+
+<main class="gradients">
+
+
+  <header id="header" class="header fixed-top d-flex align-items-center">
+
+    <div class="d-flex align-items-center justify-content-between">
+      <a class="logo d-flex align-items-center">
+        <img src="{% static 'assets/img/logo.png' %}" alt="">
+        <span class="d-none d-lg-block">FYP-22-S4-05</span>
+      </a>
+    </div><!-- End Logo -->
+
+    <div class="frontnav">
+      <a class="nav-link "  target="_blank" href="https://fyp22s405.wordpress.com">
+        <span><b>About Us</b></span>
+      </a>
+    </div><!-- End Search Bar -->
+
+
+
+  </header><!-- End Header -->
+
+    <div class="container">
+
+      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container text-center">
+          <h1 style="color:white;"><b>Welcome to face recognition attendance taking system</b></h1>
+          <div style="padding-top:100px;" class="row justify-content-center">     
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">  
+              <!-- CAMERA -->
+              <a href="{% url 'camera' %}">
+              <div class=" mb-3 homeitem1">
+                  <br>
+                  <i class="fa fa-camera largeicon"></i>
+                    <br>
+                    <br>
+                    <h2 style="font-size: bold">Clock In/Out</h2>
+              </div>
+            </a>
+            </div>      
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+              <!-- log in -->
+              <a href="{% url 'login' %}">
+                <div class=" mb-3 homeitem1">
+                      <br>
+                        <i class="fa fa-sign-in largeicon"></i>
+                        <br>
+                        <br>
+                        <h2 style="font-size: bold;">Login</h2>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main><!-- End #main -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+	
+{% block script %}
+{% endblock script %}
+{% endblock content %}
+  

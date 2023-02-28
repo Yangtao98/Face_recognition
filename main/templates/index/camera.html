@@ -1,0 +1,164 @@
+{% extends "index/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    {% csrf_token %}
+<style>
+  #videoElement {
+    width: 550px;
+    height: 415px;
+    background-color: #666;
+    transform: rotateY(180deg);
+  }
+  .boxborder{
+	width: 570px;
+	height: 435px;
+	border: 10px #333 solid;
+  }
+  .backbtn{
+    border-radius: 0;
+  }
+  .backbtn:hover{
+    border-bottom: 1px solid black;
+  }
+  </style>
+  {% csrf_token %}
+
+    <div class="container">
+   
+      <a style="margin-top: 100px;" href="{% url 'index'  %}" class="btn float-start backbtn"><i style="color: black;" class="fa fa-arrow-left"></i> back</a>
+      <section class="section register min-vh-100 d-flex flex-column justify-content-center py-4">
+        <div class="container">
+          
+          <div class="row justify-content-center">
+            
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+
+              <h1 style="width: 700px;text-align:center;font-weight:bold;">Please stay still for the system to recognise you</h1>
+              <br>
+              <h1 id="result"></h1>
+              <div class=" boxborder">
+
+              <video autoplay playsinline id="videoElement"></video>
+              <h1 id="faceDetected"></h1>
+              <canvas id="canvas" width="400" height="300"></canvas>
+
+
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+
+{% endblock content %}
+{% block script %}
+
+  <script>
+
+  var canvas = document.getElementById('canvas');
+  var context = canvas.getContext('2d');
+  var resultTemp = document.getElementById("result");
+  const video = document.querySelector("#videoElement");
+  var text_change_count = 0;
+
+  video.width = 400;
+  video.height = 300;
+
+  if (navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({
+              video: true
+          })
+          .then(function(stream) {
+
+              console.log("test")
+              video.srcObject = stream;
+              video.play();
+          })
+          .catch(function(err0r) {
+
+          });
+  }
+
+  function changeText(new_text) { 
+    // if new_text is not empty
+    if(new_text != ""){
+      // if new_text is same as currentText
+      if(new_text != resultTemp){
+        resultTemp.innerHTML  = new_text;
+        // make new_text last for 5 more seconds
+        text_change_count = 0;
+      }
+    }
+    // else if new_text is empty (no change)
+    else{
+      // when text_chanage_count reach 5, reset resulTemp to empty
+      if(text_change_count == 5){
+        resultTemp.innerHTML = "";
+        text_change_count = 0;
+      }
+      else{
+        text_change_count++;
+      }
+    }
+  }
+
+
+  function countdown() {
+      if (timeLeft == 0) {
+          clearTimeout(timerId);
+          return '..';
+      } else {
+          timeLeft--;
+          width = video.width;
+          height = video.height;
+          context.drawImage(video, 0, 0, width, height);
+          var dataTemp = canvas.toDataURL('image/jpeg', 1);
+          var sentence ="";
+          var x = document.getElementById("videoElement"); 
+          context.clearRect(0, 0, width, height);
+
+          $.ajax({
+                  type: 'POST',
+                  url: "{% url 'camera'  %}",
+                  data: {
+                      'image': dataTemp,
+                      csrfmiddlewaretoken: '{{ csrf_token }}'
+                  },
+                  success: function(data) {
+                      
+                      console.log(data.return_data);
+                      //console.log(data.return_face_detected)
+                      changeText(data.return_data);
+                      document.getElementById("faceDetected").innerHTML = data.return_face_detected;
+                      if(data.return_data.trim() == "CLOCKED IN" ){
+                        x.pause(); 
+                        window.location.href="{% url 'index'  %}";
+                        window.alert(data.return_face_detected + "! You have been Clocked In! \nPlease press OK to return to Home page.")
+                        
+                      }else if(data.return_data.trim() == "CLOCKED OUT" ){
+                        x.pause(); 
+                        window.location.href="{% url 'index'  %}";
+                        window.alert(data.return_face_detected + "! You have been Clocked Out! \nPlease press OK to return to Home page.")
+                      }
+
+                  },
+                  error: function(response) {
+                      console.log('Error')
+                  },
+              }
+
+          );
+      }
+  }
+
+  var timeLeft = 120;
+  var timerId = setInterval(countdown, 2000);
+
+  </script>
+  {% endblock script %}

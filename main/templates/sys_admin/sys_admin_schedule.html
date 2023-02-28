@@ -1,0 +1,156 @@
+{% extends "index/base.html" %}
+{% load static %}
+{% block content %}
+
+{% include 'sys_admin/sys_admin_base.html'%}
+<main id="main" class="main">
+
+    <div class="pagetitle">
+      <h1>Schedule</h1>
+      <nav>
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item"><a href="{%  url 'sys_admin_home' %}">Home</a></li>
+          <li class="breadcrumb-item active">Schedule</li>
+        </ol>
+      </nav>
+    </div><!-- End Page Title -->
+
+    <section class="section profile">
+      <div class="row">
+        
+
+        <div class="col-xl-12">
+
+          <div class="card">
+            <div class="card-body pt-3">
+              
+              <div class="ui container">
+
+                <br/>
+                <div class="ui container">
+                  <div class="ui grid">
+                    <div class="ui sixteen column">
+                      <div id="calendar"></div>
+                    </div>
+                  </div>
+                </div>
+                
+                </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  
+
+  </main><!-- End #main -->
+
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+  {% endblock content %}
+{% block script %}
+
+  <!-- Template Main JS File -->
+
+  <script>
+  {#'{{js_data|escapejs}}'#}
+  $(document).ready(function() {
+
+          var json_data = ('{{js_data|escapejs}}');
+          var result = JSON.parse(json_data);
+          var model = JSON.stringify(result,null,2);
+          var start = "";
+          var end = "";
+          var count = 0;
+          var listings ="[";
+          var strings ="";
+          var listingsnum =0 ;
+          var item = "";
+
+          var mark="" ;
+          JSON.parse(json_data, function (key, value) {
+
+            if (`${key}` == "StartDate" ){
+              
+              start = start + '"start":"' +`${value}` +'",';
+              end = end + '"end":"' +`${value}` +'"},';
+              mark = mark + '{"title": "' + `${value}` ;
+
+            } 
+            
+            else if(`${key}` == "StartTime" )
+            {
+              if (`${value}` != "null"){
+                //start = start +'T' +`${value}` +'",';
+                mark = '{"title": "' + `${value} ` ;
+              }
+              else{
+               // start = start + '",';
+                mark = mark;
+              }
+
+              
+            }
+            else if(`${key}` == "EndTime")
+            {
+              if (`${value}` != "null"){
+                //end = end +'T' +`${value}` +'"},';
+                
+                mark = mark + '- ' + `${value}` + '",';
+              }
+              else{
+               // end = end + '"},';
+                mark = mark + '",';
+              }
+              strings = mark + start + end;
+              listings = listings + strings;
+              
+              start ="";
+              end = "";
+              mark = "";
+              count ++;
+            }
+            ;
+          }); 
+          if(listings != '['){
+            listings = listings.substring(0, listings.length - 1);
+          } 
+
+          listings = listings + "]";
+
+          listingsnum =listings.length ;
+
+          listings = JSON.parse(listings);
+
+
+
+        $('#calendar').fullCalendar({
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            end: 'dayGridMonth,dayGridWeek,listWeek'
+          },
+          defaultDate: moment().format("YYYY-MM-DD"),
+          navLinks: true, // can click day/week names to navigate views
+          editable: false,
+          eventLimit: true, // allow "more" link when too many events
+          initialView: 'dayGridMonth',
+
+
+
+
+          events: listings
+
+
+    });
+  });
+
+
+
+  </script>
+{% endblock script %}
+
+

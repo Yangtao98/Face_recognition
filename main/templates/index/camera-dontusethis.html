@@ -1,0 +1,25 @@
+{% extends "index/base.html" %}
+{% load static %}
+{% block content %}
+
+<main>
+
+  <h1>Hello</h1>
+  <button>
+    <a href="{% url 'index' %}">
+      back
+    </a>
+  </button>
+
+  <img id="bg" src="{% url 'video_feed' %}" />
+
+
+</main>
+
+{% endblock content %}
+{% block script %}
+{% endblock script %}
+
+
+
+

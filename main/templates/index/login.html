@@ -1,0 +1,65 @@
+{% extends "index/base.html" %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+	<main class="gradients">
+    <div class="container">
+
+      <section class="section register min-vh-100 d-flex flex-column align-items-center justify-content-center py-4">
+        <div class="container">
+          <div class="row justify-content-center">
+            <div style="margin-bottom: 40px;" class="pt-4 pb-3">
+              <h1 style="color: white;" class="text-center"><b>Login to Your Account</b></h1>
+              {% for message in messages %}
+              <h3 style="color: red;" class="text-center">{{ message }}</h3>
+              {% endfor %}
+            </div>
+            <div class="col-lg-4 col-md-6 d-flex flex-column align-items-center justify-content-center">
+              <div style="padding: 30px 0;" class="card mb-3">
+                <div class="card-body">
+                  <br>
+                  <form class="row g-3 needs-validation" method='POST'>
+                    {% csrf_token %}
+
+                    <div class="col-12">
+                      <label for="yourEmployeeID" class="form-label">Employee ID</label>
+                      <div class="input-group has-validation">
+                        <input type="number" min='1' step='1' name="EmployeeID" class="form-control" id="yourEmployeeID" required>
+                        <div class="invalid-feedback">Please enter your Employee ID.</div>
+                      </div>
+                    </div>
+
+                    <div class="col-12">
+                      <label for="yourPassword" class="form-label">Password</label>
+                      <input type="password" name="password" class="form-control" id="yourPassword" required>
+                      <div class="invalid-feedback">Please enter your password!</div>
+                      <br>
+                    </div>
+                    
+                    
+                    <div class="col-12">
+                      <a href="{% url 'index' %}" class="btn btn-danger btn-lg">Back</a>
+                      <button class="btn btn-primary btn-lg float-end" type="submit">Login</button>
+                    </div>
+                  </form>
+
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+    </div>
+  </main><!-- End #main -->
+
+  <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
+
+{% endblock content %}
+{% block script %}
+{% endblock script %}
